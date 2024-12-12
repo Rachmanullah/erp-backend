@@ -1,0 +1,10 @@
+const express = require('express');
+const { bahanController } = require('../controller');
+const upload = require('../utils/upload');
+const router = express.Router();
+router.get('/', bahanController.HandlerGetAllBahan);
+router.get('/:id', bahanController.HandlerGetBahanById);
+router.post('/', upload.single("gambar_bahan"), bahanController.HandlerCreateBahan);
+router.put('/:id', upload.single("gambar_bahan"), bahanController.HandlerUpdateBahan);
+router.delete('/:id', bahanController.HandlerDeleteBahan);
+module.exports = router;

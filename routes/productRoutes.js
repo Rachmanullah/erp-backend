@@ -1,0 +1,10 @@
+const express = require('express');
+const { productController } = require('../controller');
+const upload = require('../utils/upload');
+const router = express.Router();
+router.get('/', productController.HandlerGetAllProduct);
+router.get('/:id', productController.HandlerGetProductById);
+router.post('/', upload.single("gambar_produk"), productController.HandlerCreateProduct);
+router.put('/:id', upload.single("gambar_produk"), productController.HandlerUpdateProduct);
+router.delete('/:id', productController.HandlerDeleteProduct);
+module.exports = router;

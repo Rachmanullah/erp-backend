@@ -30,7 +30,7 @@ model Product {
 model Bahan {
   id           Int      @id @default(autoincrement())
   nama_bahan   String?
-  biaya_bahan  String?
+  biaya_bahan  Int?
   harga_bahan  Int?
   stok         Int?
   gambar_bahan String?
@@ -62,5 +62,3 @@ model order {
   created_at   DateTime @default(now())
   updated_at   DateTime @default(now())
 }
-
-
