@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id             Int      @id @default(autoincrement())
+  nama_produk    String?
+  referensi      String?
+  kategori       String?
+  harga_produk   Int?
+  biaya_produksi Int?
+  stok           Int?
+  gambar_produk  String?
+  created_at     DateTime @default(now())
+  updated_at     DateTime @default(now())
+  BoM            BoM[]
+}
+
+model Bahan {
+  id           Int      @id @default(autoincrement())
+  nama_bahan   String?
+  biaya_bahan  String?
+  harga_bahan  Int?
+  stok         Int?
+  gambar_bahan String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now())
+  BoM          BoM[]
+}
+
+model BoM {
+  id                 Int      @id @default(autoincrement())
+  id_produk          Int
+  id_bahan           Int
+  jumlah_produk      Int?
+  jumlah_bahan       Int?
+  total_biaya_produk Int?
+  total_biaya_bahan  Int?
+  Product            Product? @relation(fields: [id_produk], references: [id])
+  Bahan              Bahan?   @relation(fields: [id_bahan], references: [id])
+  created_at         DateTime @default(now())
+  updated_at         DateTime @default(now())
+}
+
+model order {
+  id           Int      @id @default(autoincrement())
+  id_produk    Int
+  id_bom       Int
+  jumlah_order Int?
+  status       String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now())
+}
+
+
