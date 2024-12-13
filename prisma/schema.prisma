@@ -43,6 +43,7 @@ model BoM {
   id                 Int      @id @default(autoincrement())
   id_produk          Int
   id_bahan           Int
+  referensi          String?  @unique
   jumlah_produk      Int?
   jumlah_bahan       Int?
   total_biaya_produk Int?

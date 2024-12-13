@@ -1,0 +1,10 @@
+const express = require('express');
+const { bomController } = require('../controller');
+const router = express.Router();
+router.get('/', bomController.HandlerGetAllBoM);
+// router.get('/:id', bomController.HandlerGetBoMById);
+router.get('/reference/:referensi', bomController.HandlerGetBoMByReference);
+router.post('/', bomController.HandlerCreateBoM);
+router.put('/:referensi', bomController.HandlerUpdateBoM);
+router.delete('/:referensi', bomController.HandlerDeleteBoM);
+module.exports = router;

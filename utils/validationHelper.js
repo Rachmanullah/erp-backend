@@ -10,7 +10,7 @@ const validateBahan = yup.object({
 
 const validateProduct = yup.object({
     nama_produk: yup.string().required('Nama produk harus diisi'),
-    referensi: yup.string().optional(),  // Referensi bisa kosong
+    referensi: yup.string().optional(),
     kategori: yup.string().required('Kategori produk harus diisi'),
     harga_produk: yup.number().positive('Harga produk harus lebih besar dari 0').required('Harga produk harus diisi'),
     biaya_produksi: yup.number().positive('Biaya produksi harus lebih besar dari 0').required('Biaya produksi harus diisi'),
@@ -20,11 +20,16 @@ const validateProduct = yup.object({
 
 const validateBoM = yup.object({
     id_produk: yup.number().integer().required('ID produk harus diisi'),
-    id_bahan: yup.number().integer().required('ID bahan harus diisi'),
+    referensi: yup.string().optional(),
     jumlah_produk: yup.number().positive('Jumlah produk harus lebih besar dari 0').integer().required('Jumlah produk harus diisi'),
-    jumlah_bahan: yup.number().positive('Jumlah bahan harus lebih besar dari 0').integer().required('Jumlah bahan harus diisi'),
     total_biaya_produk: yup.number().positive('Total biaya produk harus lebih besar dari 0').required('Total biaya produk harus diisi'),
-    total_biaya_bahan: yup.number().positive('Total biaya bahan harus lebih besar dari 0').required('Total biaya bahan harus diisi'),
+    bahan: yup.array().of(
+        yup.object({
+            id_bahan: yup.number().integer().required('ID bahan harus diisi'),
+            jumlah_bahan: yup.number().positive('Jumlah bahan harus lebih besar dari 0').integer().required('Jumlah bahan harus diisi'),
+            total_biaya_bahan: yup.number().positive('Total biaya bahan harus lebih besar dari 0').required('Total biaya bahan harus diisi'),
+        })
+    ).required(),
 });
 
 const validateOrder = yup.object({
