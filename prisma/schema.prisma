@@ -25,6 +25,7 @@ model Product {
   created_at     DateTime @default(now())
   updated_at     DateTime @default(now())
   BoM            BoM[]
+  order          order[]
 }
 
 model Bahan {
@@ -43,7 +44,7 @@ model BoM {
   id                 Int      @id @default(autoincrement())
   id_produk          Int
   id_bahan           Int
-  referensi          String?  @unique
+  referensi          String?
   jumlah_produk      Int?
   jumlah_bahan       Int?
   total_biaya_produk Int?
@@ -55,11 +56,13 @@ model BoM {
 }
 
 model order {
-  id           Int      @id @default(autoincrement())
-  id_produk    Int
-  id_bom       Int
-  jumlah_order Int?
-  status       String?
-  created_at   DateTime @default(now())
-  updated_at   DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  id_produk     Int
+  referensi     String?
+  referensi_bom String?
+  jumlah_order  Int?
+  status        String?
+  Product       Product? @relation(fields: [id_produk], references: [id])
+  created_at    DateTime @default(now())
+  updated_at    DateTime @default(now())
 }

@@ -1,0 +1,10 @@
+const express = require('express');
+const { orderController } = require('../controller');
+const router = express.Router();
+router.get('/', orderController.HandlerGetAllOrder);
+router.get('/:id', orderController.HandlerGetOrderById);
+router.post('/', orderController.HandlerCreateOrder);
+router.put('/:id', orderController.HandlerUpdateOrder);
+router.put('/status/:id', orderController.HandlerUpdateStatusOrder);
+router.delete('/:id', orderController.HandlerDeleteOrder);
+module.exports = router;

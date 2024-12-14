@@ -34,9 +34,9 @@ const validateBoM = yup.object({
 
 const validateOrder = yup.object({
     id_produk: yup.number().integer().required('ID produk harus diisi'),
-    id_bom: yup.number().integer().required('ID BoM harus diisi'),
+    referensi_bom: yup.string().required('Referensi BoM harus diisi'),
     jumlah_order: yup.number().positive('Jumlah order harus lebih besar dari 0').integer().required('Jumlah order harus diisi'),
-    status: yup.string().oneOf(['pending', 'completed', 'shipped'], 'Status harus salah satu dari pending, completed, atau shipped').required('Status harus diisi'),
+    status: yup.string().oneOf(['Draft', 'Confirmed', 'Production', 'Done'], 'Status harus salah satu dari Draft, Confirmed, atau Done').default('Draft'),
 });
 
 

@@ -26,6 +26,7 @@ const createProduct = async (productData) => {
             ...productData,
             harga_produk: parseInt(productData.harga_produk),
             biaya_produksi: parseInt(productData.biaya_produksi),
+            stok: 0,
         }
         return await productModels.create(newProduct);
     } catch (error) {

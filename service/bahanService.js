@@ -25,6 +25,7 @@ const createBahan = async (bahanData) => {
             ...bahanData,
             biaya_bahan: parseInt(bahanData.biaya_bahan),
             harga_bahan: parseInt(bahanData.harga_bahan),
+            stok: 0,
         }
 
         return await bahanModels.create(newBahan);
