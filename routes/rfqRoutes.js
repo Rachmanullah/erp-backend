@@ -1,0 +1,10 @@
+const express = require('express');
+const { rfqController } = require('../controller');
+const router = express.Router();
+router.get('/', rfqController.HandlerGetAllRfq);
+router.get('/:referensi', rfqController.HandlerGetRfqByReference);
+router.post('/', rfqController.HandlerCreateRfq);
+router.put('/:referensi', rfqController.HandlerUpdateRfq);
+router.put('/status/:referensi', rfqController.HandlerUpdateStatusRfq);
+router.delete('/:referensi', rfqController.HandlerDeleteRfq);
+module.exports = router;

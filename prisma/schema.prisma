@@ -38,6 +38,7 @@ model Bahan {
   created_at   DateTime @default(now())
   updated_at   DateTime @default(now())
   BoM          BoM[]
+  rfq          rfq[]
 }
 
 model BoM {
@@ -77,4 +78,27 @@ model vendor {
   email              String?
   created_at         DateTime @default(now())
   updated_at         DateTime @default(now())
+  rfq                rfq[]
+}
+
+model rfq {
+  id             Int       @id @default(autoincrement())
+  id_vendor      Int
+  Vendor         vendor?   @relation(fields: [id_vendor], references: [id])
+  referensi      String?
+  deadline_order DateTime?
+  id_bahan       Int?
+  Bahan          Bahan?    @relation(fields: [id_bahan], references: [id])
+  jumlah_bahan   Int?
+  total_biaya    Int?
+  status         String? //RFQ, RFQ Send, Confirm, Receive, Validate/Cancel,
+}
+
+model purchaseOrder {
+  id                Int       @id @default(autoincrement())
+  referensi_rfq     String?
+  type              String?
+  jumlah_pembayaran Int?
+  payment_date      DateTime?
+  status            String? //Nothing to bill, Waiting Bill, Fully Billed
 }

@@ -3,6 +3,7 @@ const productController = require('./productController');
 const bomController = require('./bomController');
 const orderController = require('./orderController');
 const vendorController = require('./vendorController');
+const rfqController = require('./rfqController');
 
 module.exports = {
     bahanController,
@@ -10,4 +11,5 @@ module.exports = {
     bomController,
     orderController,
     vendorController,
+    rfqController,
 }

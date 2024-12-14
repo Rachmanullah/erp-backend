@@ -48,6 +48,19 @@ const validateVendor = yup.object({
     email: yup.string().email('Email vendor harus valid').required('Email vendor harus diisi'),
 });
 
+const validateRfq = yup.object({
+    id_vendor: yup.number().integer().required('ID vendor harus diisi'),
+    referensi: yup.string().optional(),
+    deadline_order: yup.string().optional(),
+    status: yup.string().oneOf(['RFQ', 'Send RFQ', 'Confirmed', 'Received', 'Validated', 'Cancel', 'Return'], 'Status harus pilih salah satu').default('RFQ'),
+    bahan: yup.array().of(
+        yup.object({
+            id_bahan: yup.number().integer().required('ID bahan harus diisi'),
+            jumlah_bahan: yup.number().positive('Jumlah bahan harus lebih besar dari 0').integer().required('Jumlah bahan harus diisi'),
+            total_biaya: yup.number().positive('Total biaya bahan harus lebih besar dari 0').required('Total biaya bahan harus diisi'),
+        })
+    ).required(),
+});
 
 module.exports = {
     validateBahan,
@@ -55,4 +68,5 @@ module.exports = {
     validateBoM,
     validateOrder,
     validateVendor,
+    validateRfq,
 };

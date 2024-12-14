@@ -1,5 +1,5 @@
 const { bomModels } = require("../model");
-const { cleanBoMData } = require("../utils/cleanDataBom");
+const { cleanBoMData } = require("../utils/cleanData");
 const { validateBoM } = require("../utils/validationHelper");
 
 const findAllBoM = async () => {
@@ -136,7 +136,6 @@ const updateBoMByReferensi = async (referensi, bomData) => {
         throw error;
     }
 };
-
 
 module.exports = {
     findAllBoM,

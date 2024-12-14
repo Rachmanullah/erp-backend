@@ -10,6 +10,20 @@ const cleanBoMData = (data) => {
         })),
     };
 };
+
+const cleanRfqData = (data) => {
+    return {
+        ...data,
+        id_vendor: parseInt(data.id_vendor),
+        bahan: data.bahan.map((item) => ({
+            id_bahan: parseInt(item.id_bahan),
+            jumlah_bahan: parseFloat(item.jumlah_bahan),
+            total_biaya: parseFloat(item.total_biaya),
+        })),
+    };
+};
+
 module.exports = {
     cleanBoMData,
+    cleanRfqData
 }

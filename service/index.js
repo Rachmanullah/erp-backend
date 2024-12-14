@@ -3,6 +3,7 @@ const productService = require('./productService');
 const bomService = require('./bomService');
 const orderService = require('./orderService');
 const vendorService = require('./vendorService');
+const rfqService = require('./rfqService');
 
 module.exports = {
     bahanService,
@@ -10,4 +11,5 @@ module.exports = {
     bomService,
     orderService,
     vendorService,
+    rfqService,
 }

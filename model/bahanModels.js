@@ -51,6 +51,22 @@ const update = async (bahanID, bahanData) => {
     }
 }
 
+const updateStok = async (bahanID, stokBahan) => {
+    try {
+        console.log(stokBahan)
+        const bahan = await prisma.bahan.update({
+            where: {
+                id: bahanID
+            },
+            data: { stok: stokBahan }
+        });
+        return bahan;
+    } catch (error) {
+        console.error("Error updating bahan:", error);
+        throw error;
+    }
+}
+
 const destroy = async (bahanID) => {
     try {
         const deletedBahan = await prisma.bahan.delete({
@@ -71,4 +87,5 @@ module.exports = {
     create,
     update,
     destroy,
+    updateStok
 }
