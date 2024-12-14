@@ -1,0 +1,10 @@
+const express = require('express');
+const { vendorController } = require('../controller');
+const upload = require('../utils/upload');
+const router = express.Router();
+router.get('/', vendorController.HandlerGetAllVendor);
+router.get('/:id', vendorController.HandlerGetVendorById);
+router.post('/', vendorController.HandlerCreateVendor);
+router.put('/:id', vendorController.HandlerUpdateVendor);
+router.delete('/:id', vendorController.HandlerDeleteVendor);
+module.exports = router;

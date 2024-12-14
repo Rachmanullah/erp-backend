@@ -36,7 +36,16 @@ const validateOrder = yup.object({
     id_produk: yup.number().integer().required('ID produk harus diisi'),
     referensi_bom: yup.string().required('Referensi BoM harus diisi'),
     jumlah_order: yup.number().positive('Jumlah order harus lebih besar dari 0').integer().required('Jumlah order harus diisi'),
-    status: yup.string().oneOf(['Draft', 'Confirmed', 'Production', 'Done'], 'Status harus salah satu dari Draft, Confirmed, atau Done').default('Draft'),
+    status: yup.string().oneOf(['Draft', 'Confirmed', 'Production', 'Done'], 'Status harus salah satu dari Draft, Confirmed, Production atau Done').default('Draft'),
+});
+
+const validateVendor = yup.object({
+    company_registrasi: yup.string().optional(),
+    nama_vendor: yup.string().required('Nama vendor harus diisi'),
+    type: yup.string().oneOf(['Individual', 'Company'], 'Status harus salah satu dari Individual, Company').required(),
+    alamat: yup.string().required('Alamat vendor harus diisi'),
+    no_telp: yup.string().optional(),
+    email: yup.string().email('Email vendor harus valid').required('Email vendor harus diisi'),
 });
 
 
@@ -45,4 +54,5 @@ module.exports = {
     validateProduct,
     validateBoM,
     validateOrder,
+    validateVendor,
 };

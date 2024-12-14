@@ -66,3 +66,15 @@ model order {
   created_at    DateTime @default(now())
   updated_at    DateTime @default(now())
 }
+
+model vendor {
+  id                 Int      @id @default(autoincrement())
+  company_registrasi String?
+  nama_vendor        String?
+  type               String?
+  alamat             String?
+  no_telp            String?
+  email              String?
+  created_at         DateTime @default(now())
+  updated_at         DateTime @default(now())
+}
