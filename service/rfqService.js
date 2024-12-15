@@ -1,4 +1,4 @@
-const { rfqModels, bahanModels } = require("../model");
+const { rfqModels, bahanModels, purchaseOrderModels } = require("../model");
 const { cleanRfqData } = require("../utils/cleanData");
 const { validateRfq } = require("../utils/validationHelper");
 
@@ -132,8 +132,30 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
             total_biaya: item.total_biaya,
         }));
 
+        //status Received
+        if (updatedStatus.status === 'Received') {
+
+            let totalPembayaran = 0;
+
+            for (const bahan of rfqBahan) {
+                totalPembayaran += Number(bahan.total_biaya) || 0;
+            }
+
+            const dataPO = {
+                referensi_rfq: referensiRfq,
+                jumlah_pembayaran: parseInt(totalPembayaran),
+                status: "Nothing to Bill",
+            }
+
+            await purchaseOrderModels.create(dataPO);
+
+            // Log dataPO untuk memastikan berhasil dibuat
+            console.log("Data Purchase Order:", dataPO);
+        }
+
         // Jika status adalah 'Validated'
         if (updatedStatus.status === 'Validated') {
+            let totalPembayaran = 0;
             for (const bahan of rfqBahan) {
                 // Ambil stok bahan saat ini
                 const currentBahan = await bahanModels.findByID(bahan.id_bahan);
@@ -143,20 +165,27 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
                 }
 
                 // Log nilai sebelum operasi
-                console.log("currentBahan.jumlah_bahan:", currentBahan.jumlah_bahan);
+                console.log("currentBahan.jumlah_bahan:", currentBahan.stok);
                 console.log("bahan.jumlah_bahan:", bahan.jumlah_bahan);
 
                 // Hitung jumlah bahan baru
                 const updatedJumlahBahan =
-                    (Number(currentBahan.jumlah_bahan) || 0) + (Number(bahan.jumlah_bahan) || 0);
+                    (Number(currentBahan.stok) || 0) + (Number(bahan.jumlah_bahan) || 0);
 
                 // Log hasil perhitungan
                 console.log(`Bahan: ${currentBahan.nama_bahan}, Jumlah Baru: ${updatedJumlahBahan}`);
 
                 // Perbarui stok bahan
                 await bahanModels.updateStok(bahan.id_bahan, updatedJumlahBahan);
-            }
 
+                totalPembayaran += Number(bahan.total_biaya) || 0;
+            }
+            const purchaseOrder = await purchaseOrderModels.findByReferensiRfq(referensiRfq);
+            await purchaseOrderModels.update(purchaseOrder.id, { status: 'Waiting Bill' });
+        }
+
+        if (updatedStatus.status === 'Cancel') {
+            await purchaseOrderModels.destroybyReferensiRfq(referensiRfq);
         }
 
         // Jika status adalah 'Return'
@@ -176,6 +205,8 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
                 // // Perbarui stok bahan
                 await bahanModels.updateStok(bahan.id_bahan, updatedJumlahBahan);
             }
+
+            await purchaseOrderModels.destroybyReferensiRfq(referensiRfq);
         }
 
         // Update status RFQ
@@ -188,6 +219,8 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
 
 const deleteRfq = async (referensi) => {
     try {
+        const purchaseOrder = await purchaseOrderModels.findByReferensiRfq(referensi);
+        purchaseOrder && await purchaseOrderModels.destroybyReferensiRfq(referensi);
         return await rfqModels.destroy(referensi);
     } catch (error) {
         throw new Error('Error delete data: ' + error.message);

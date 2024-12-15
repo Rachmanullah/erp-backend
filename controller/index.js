@@ -4,6 +4,7 @@ const bomController = require('./bomController');
 const orderController = require('./orderController');
 const vendorController = require('./vendorController');
 const rfqController = require('./rfqController');
+const purchaseOrderController = require('./purchaseOrderController');
 
 module.exports = {
     bahanController,
@@ -12,4 +13,5 @@ module.exports = {
     orderController,
     vendorController,
     rfqController,
+    purchaseOrderController
 }

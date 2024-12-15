@@ -62,6 +62,14 @@ const validateRfq = yup.object({
     ).required(),
 });
 
+const validatePO = yup.object({
+    referensi_rfq: yup.string().required('referensi rfq harus di isi'),
+    type: yup.string().oneOf(['-', 'Cash', 'Bank'], 'type harus pilih salah satu').default('-'),
+    jumlah_pembayaran: yup.number().positive('jumlah pembayaran harus lebih besar dari 0').required('jumlah pembayaran harus di isi'),
+    payment_date: yup.string().optional(),
+    status: yup.string().oneOf(['Nothing to Bill', 'Waiting Bill', 'Fully Billed'], 'Status harus pilih salah satu').default('Nothing to Bill'),
+})
+
 module.exports = {
     validateBahan,
     validateProduct,
@@ -69,4 +77,5 @@ module.exports = {
     validateOrder,
     validateVendor,
     validateRfq,
+    validatePO,
 };

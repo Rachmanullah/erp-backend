@@ -7,6 +7,7 @@ const bomRoutes = require('./bomRoutes');
 const orderRoutes = require('./orderRoutes');
 const vendorRoutes = require('./vendorRoutes');
 const rfqRoutes = require('./rfqRoutes');
+const purchaseOrderRoutes = require('./purchaseOrderRoutes');
 
 router.use('/bahan', bahanRoutes);
 router.use('/product', productRoutes);
@@ -14,5 +15,6 @@ router.use('/bom', bomRoutes);
 router.use('/order', orderRoutes);
 router.use('/vendor', vendorRoutes);
 router.use('/rfq', rfqRoutes);
+router.use('/purchaseOrder', purchaseOrderRoutes);
 
 module.exports = router;

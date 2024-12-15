@@ -4,6 +4,7 @@ const bomModels = require('./bomModels');
 const orderModels = require('./orderModels');
 const vendorModels = require('./vendorModels');
 const rfqModels = require('./rfqModels');
+const purchaseOrderModels = require('./purchaseOrderModels');
 
 module.exports = {
     bahanModels,
@@ -12,4 +13,5 @@ module.exports = {
     orderModels,
     vendorModels,
     rfqModels,
+    purchaseOrderModels,
 }

@@ -96,7 +96,7 @@ model rfq {
 
 model purchaseOrder {
   id                Int       @id @default(autoincrement())
-  referensi_rfq     String?
+  referensi_rfq     String?   @unique
   type              String?
   jumlah_pembayaran Int?
   payment_date      DateTime?
