@@ -8,6 +8,7 @@ const orderRoutes = require('./orderRoutes');
 const vendorRoutes = require('./vendorRoutes');
 const rfqRoutes = require('./rfqRoutes');
 const purchaseOrderRoutes = require('./purchaseOrderRoutes');
+const billRoutes = require('./billRoutes');
 
 router.use('/bahan', bahanRoutes);
 router.use('/product', productRoutes);
@@ -16,5 +17,6 @@ router.use('/order', orderRoutes);
 router.use('/vendor', vendorRoutes);
 router.use('/rfq', rfqRoutes);
 router.use('/purchaseOrder', purchaseOrderRoutes);
+router.use('/bill', billRoutes);
 
 module.exports = router;

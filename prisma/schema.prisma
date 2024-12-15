@@ -91,14 +91,26 @@ model rfq {
   Bahan          Bahan?    @relation(fields: [id_bahan], references: [id])
   jumlah_bahan   Int?
   total_biaya    Int?
-  status         String? //RFQ, RFQ Send, Confirm, Receive, Validate/Cancel,
+  status         String? //RFQ, RFQ Send, Confirm, Receive, Purchase Order/Cancel,
 }
 
 model purchaseOrder {
   id                Int       @id @default(autoincrement())
   referensi_rfq     String?   @unique
-  type              String?
-  jumlah_pembayaran Int?
-  payment_date      DateTime?
+  total_pembayaran  Int?
+  confirmation_date DateTime?
+  arrival_date      DateTime?
   status            String? //Nothing to bill, Waiting Bill, Fully Billed
+}
+
+model billPurchase {
+  id               Int       @id @default(autoincrement())
+  referensi_rfq    String?   @unique
+  referensi_bill   String?   @unique
+  accounting_date  DateTime?
+  bill_date        DateTime?
+  payment_date     DateTime?
+  type_bill        String?
+  total_pembayaran Int?
+  status           String? //Draft, Posted, Not Paid, Paid
 }

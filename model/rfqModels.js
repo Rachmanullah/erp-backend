@@ -124,7 +124,7 @@ const destroyMany = async (referensi, bahanIDs) => {
 
 const updateStatusRfq = async (referensiRFQ, statusRfq) => {
     try {
-        // Update status RFQ
+        console.log(statusRfq.status)
         await prisma.rfq.updateMany({
             where: {
                 referensi: referensiRFQ

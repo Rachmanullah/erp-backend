@@ -1,4 +1,4 @@
-const { rfqModels, bahanModels, purchaseOrderModels } = require("../model");
+const { rfqModels, bahanModels, purchaseOrderModels, billModels } = require("../model");
 const { cleanRfqData } = require("../utils/cleanData");
 const { validateRfq } = require("../utils/validationHelper");
 
@@ -133,7 +133,7 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
         }));
 
         //status Received
-        if (updatedStatus.status === 'Received') {
+        if (updatedStatus.status === 'Confirmed') {
 
             let totalPembayaran = 0;
 
@@ -143,7 +143,8 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
 
             const dataPO = {
                 referensi_rfq: referensiRfq,
-                jumlah_pembayaran: parseInt(totalPembayaran),
+                confirmation_date: new Date(),
+                total_pembayaran: parseInt(totalPembayaran),
                 status: "Nothing to Bill",
             }
 
@@ -153,8 +154,14 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
             console.log("Data Purchase Order:", dataPO);
         }
 
-        // Jika status adalah 'Validated'
-        if (updatedStatus.status === 'Validated') {
+        //status Received
+        if (updatedStatus.status === 'Received') {
+            const purchaseOrder = await purchaseOrderModels.findByReferensiRfq(referensiRfq);
+            await purchaseOrderModels.update(purchaseOrder.id, { arrival_date: new Date() });
+        }
+
+        // Jika status adalah 'Purchase Order'
+        if (updatedStatus.status === 'Purchase Order') {
             let totalPembayaran = 0;
             for (const bahan of rfqBahan) {
                 // Ambil stok bahan saat ini
@@ -182,6 +189,26 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
             }
             const purchaseOrder = await purchaseOrderModels.findByReferensiRfq(referensiRfq);
             await purchaseOrderModels.update(purchaseOrder.id, { status: 'Waiting Bill' });
+
+            const lastBill = await billModels.checkLastReferencedBill();
+            let nextNumber = 1;
+            const today = new Date().toISOString().split('T')[0];
+            if (lastBill) {
+                const lastReferensi = lastBill.referensi_bill;
+                const lastNumber = parseInt(lastReferensi.split('/').pop()); // Ambil nomor terakhir
+                nextNumber = lastNumber + 1;
+            }
+
+            const referensiBill = `Bill/${today}/${nextNumber}`;
+            const dataBill = {
+                referensi_rfq: referensiRfq,
+                referensi_bill: referensiBill,
+                accounting_date: new Date(),
+                total_pembayaran: parseInt(totalPembayaran),
+                status: "Draft",
+            }
+
+            await billModels.create(dataBill);
         }
 
         if (updatedStatus.status === 'Cancel') {

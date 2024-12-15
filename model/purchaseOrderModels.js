@@ -5,7 +5,7 @@ const findAll = async () => {
         const purchaseOrder = await prisma.purchaseOrder.findMany({});
         return purchaseOrder;
     } catch (error) {
-        console.error("Error fetching rfq:", error);
+        console.error("Error fetching purchase order:", error);
         throw error;
     }
 }
@@ -19,7 +19,7 @@ const findByID = async (purchaseOrderID) => {
         });
         return purchaseOrder;
     } catch (error) {
-        console.error("Error fetching rfq by Referensi:", error);
+        console.error("Error fetching purchase order by Referensi:", error);
         throw error;
     }
 }
@@ -33,7 +33,7 @@ const findByReferensiRfq = async (rfqReferensi) => {
         });
         return purchaseOrder;
     } catch (error) {
-        console.error("Error fetching rfq by Referensi:", error);
+        console.error("Error fetching purchase order by Referensi:", error);
         throw error;
     }
 }
@@ -45,7 +45,7 @@ const create = async (data) => {
         });
         return purchaseOrder;
     } catch (error) {
-        console.error("Error creating rfq:", error);
+        console.error("Error creating purchase order:", error);
         throw error;
     }
 }
@@ -60,7 +60,22 @@ const update = async (ID, data) => {
         });
         return purchaseOrder;
     } catch (error) {
-        console.error("Error creating rfq:", error);
+        console.error("Error update purchase order:", error);
+        throw error;
+    }
+}
+
+const updateStatus = async (referensiRfq, data) => {
+    try {
+        const purchaseOrder = await prisma.purchaseOrder.update({
+            where: {
+                referensi_rfq: referensiRfq,
+            },
+            data: data,
+        });
+        return purchaseOrder;
+    } catch (error) {
+        console.error("Error update purchase order:", error);
         throw error;
     }
 }
@@ -74,7 +89,7 @@ const destroy = async (ID) => {
         });
         return deletedPO;
     } catch (error) {
-        console.error("Error deleting BoM by ID:", error);
+        console.error("Error deleting purchase order by ID:", error);
         throw error;
     }
 }
@@ -88,7 +103,7 @@ const destroybyReferensiRfq = async (referensiRfq) => {
         });
         return deletedPO;
     } catch (error) {
-        console.error("Error deleting BoM by ID:", error);
+        console.error("Error deleting purchase order by ID:", error);
         throw error;
     }
 }
@@ -101,5 +116,6 @@ module.exports = {
     create,
     update,
     destroy,
-    destroybyReferensiRfq
+    destroybyReferensiRfq,
+    updateStatus
 }
