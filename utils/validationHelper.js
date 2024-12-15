@@ -70,6 +70,15 @@ const validatePO = yup.object({
     status: yup.string().oneOf(['Nothing to Bill', 'Waiting Bill', 'Fully Billed'], 'Status harus pilih salah satu').default('Nothing to Bill'),
 })
 
+const validateCustomer = yup.object({
+    company_registrasi: yup.string().optional(),
+    nama_customer: yup.string().required('Nama customer harus diisi'),
+    type: yup.string().oneOf(['Individual', 'Company'], 'Status harus salah satu dari Individual, Company').required(),
+    alamat: yup.string().required('Alamat customer harus diisi'),
+    no_telp: yup.string().optional(),
+    email: yup.string().email('Email customer harus valid').required('Email customer harus diisi'),
+});
+
 module.exports = {
     validateBahan,
     validateProduct,
@@ -78,4 +87,5 @@ module.exports = {
     validateVendor,
     validateRfq,
     validatePO,
+    validateCustomer,
 };

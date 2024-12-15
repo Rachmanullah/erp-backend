@@ -6,6 +6,7 @@ const vendorController = require('./vendorController');
 const rfqController = require('./rfqController');
 const purchaseOrderController = require('./purchaseOrderController');
 const billController = require('./billController');
+const customerController = require('./customerController');
 
 module.exports = {
     bahanController,
@@ -16,4 +17,5 @@ module.exports = {
     rfqController,
     purchaseOrderController,
     billController,
+    customerController,
 }

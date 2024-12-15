@@ -6,6 +6,7 @@ const vendorModels = require('./vendorModels');
 const rfqModels = require('./rfqModels');
 const purchaseOrderModels = require('./purchaseOrderModels');
 const billModels = require('./billModels');
+const customerModels = require('./customerModels');
 
 module.exports = {
     bahanModels,
@@ -16,4 +17,5 @@ module.exports = {
     rfqModels,
     purchaseOrderModels,
     billModels,
+    customerModels
 }

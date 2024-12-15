@@ -6,6 +6,7 @@ const vendorService = require('./vendorService');
 const rfqService = require('./rfqService');
 const purchaseOrderService = require('./purchaseOrderService');
 const billService = require('./billService');
+const customerService = require('./customerService');
 
 module.exports = {
     bahanService,
@@ -16,4 +17,5 @@ module.exports = {
     rfqService,
     purchaseOrderService,
     billService,
+    customerService,
 }
