@@ -30,8 +30,23 @@ const createBoM = async (bomData) => {
     try {
         const cleanedData = cleanBoMData(bomData);
         await validateBoM.validate(cleanedData, { abortEarly: false });
+        const lastBom = await bomModels.checkLastReferencedBom();
+        let newReference = 'BOM-0001'; // Default jika tidak ada order sebelumnya
+        if (lastBom) {
+            const lastReference = lastBom.referensi;
+            const match = lastReference.match(/BOM-(\d+)/); // Ekstrak angka dari referensi terakhir
+            if (match) {
+                const lastNumber = parseInt(match[1], 10); // Convert angka terakhir ke integer
+                const nextNumber = lastNumber + 1; // Tambahkan 1 untuk referensi baru
+                newReference = `BOM-${nextNumber.toString().padStart(4, '0')}`; // Format jadi MO/XXXX
+            }
+        }
 
-        return await bomModels.create(cleanedData);
+        const formattedData = {
+            ...cleanedData,
+            referensi: newReference
+        }
+        return await bomModels.create(formattedData);
     } catch (error) {
         throw error;
     }

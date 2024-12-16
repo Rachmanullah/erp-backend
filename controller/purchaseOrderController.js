@@ -56,7 +56,7 @@ const HandlerGetPoByID = async (req, res) => {
         const dataResponse = {
             id: data.id,
             referensi_rfq: data.referensi_rfq,
-            referensi_bill: billReference.referensi_bill,
+            referensi_bill: billReference,
             nama_vendor,
             confirmation_date: data.confirmation_date,
             total_pembayaran: data.total_pembayaran,

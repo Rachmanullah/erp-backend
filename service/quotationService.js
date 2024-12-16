@@ -22,7 +22,17 @@ const createQuotation = async (quotationData) => {
     try {
         const cleanedData = cleanQuotationData(quotationData);
         await validateQuotation.validate(cleanedData, { abortEarly: false });
-        console.log(cleanedData)
+        const lastOrder = await quotationModels.checkLastReferencedQuotation();
+        let newReference = 'SQ-0001'; // Default jika tidak ada order sebelumnya
+        if (lastOrder) {
+            const lastReference = lastOrder.referensi;
+            const match = lastReference.match(/SQ-(\d+)/); // Ekstrak angka dari referensi terakhir
+            if (match) {
+                const lastNumber = parseInt(match[1], 10); // Convert angka terakhir ke integer
+                const nextNumber = lastNumber + 1; // Tambahkan 1 untuk referensi baru
+                newReference = `SQ-${nextNumber.toString().padStart(4, '0')}`; // Format jadi MO/XXXX
+            }
+        }
         const data = {
             ...cleanedData,
             status: "Quotation"

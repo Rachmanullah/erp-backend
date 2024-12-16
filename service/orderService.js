@@ -24,14 +24,14 @@ const createOrder = async (orderData) => {
         // Ambil referensi terakhir dari database
         const lastOrder = await orderModels.checkLastReferencedOrder();
 
-        let newReference = 'MO/0001'; // Default jika tidak ada order sebelumnya
+        let newReference = 'MO-0001'; // Default jika tidak ada order sebelumnya
         if (lastOrder) {
             const lastReference = lastOrder.referensi;
-            const match = lastReference.match(/MO\/(\d+)/); // Ekstrak angka dari referensi terakhir
+            const match = lastReference.match(/MO-(\d+)/); // Ekstrak angka dari referensi terakhir
             if (match) {
                 const lastNumber = parseInt(match[1], 10); // Convert angka terakhir ke integer
                 const nextNumber = lastNumber + 1; // Tambahkan 1 untuk referensi baru
-                newReference = `MO/${nextNumber.toString().padStart(4, '0')}`; // Format jadi MO/XXXX
+                newReference = `MO-${nextNumber.toString().padStart(4, '0')}`; // Format jadi MO/XXXX
             }
         }
 

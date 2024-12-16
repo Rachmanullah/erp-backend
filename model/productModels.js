@@ -80,11 +80,26 @@ const updateStok = async (produkID, stokProduk) => {
     }
 }
 
+const checkLastReferencedProduk = async () => {
+    try {
+        const produk = await prisma.product.findFirst({
+            orderBy: {
+                referensi: 'desc',
+            },
+        });
+        return produk;
+    } catch (error) {
+        console.error("Error checking last referenced order:", error);
+        throw error;
+    }
+}
+
 module.exports = {
     findAll,
     findByID,
     create,
     update,
     destroy,
-    updateStok
+    updateStok,
+    checkLastReferencedProduk,
 }

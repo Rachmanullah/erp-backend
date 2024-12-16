@@ -157,6 +157,19 @@ const updateStatusQuotation = async (referensi, statusQuotation) => {
     }
 };
 
+const checkLastReferencedQuotation = async () => {
+    try {
+        const quotation = await prisma.salesQuotation.findFirst({
+            orderBy: {
+                referensi: 'desc',
+            },
+        });
+        return quotation;
+    } catch (error) {
+        console.error("Error checking last referenced order:", error);
+        throw error;
+    }
+}
 
 module.exports = {
     findAll,
@@ -165,5 +178,6 @@ module.exports = {
     update,
     destroy,
     destroyMany,
-    updateStatusQuotation
+    updateStatusQuotation,
+    checkLastReferencedQuotation
 }

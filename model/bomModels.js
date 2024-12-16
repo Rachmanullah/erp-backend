@@ -173,6 +173,19 @@ const destroyMany = async (referensi, bahanIDs) => {
     }
 };
 
+const checkLastReferencedBom = async () => {
+    try {
+        const BoMdata = await prisma.boM.findFirst({
+            orderBy: {
+                referensi: 'desc',
+            },
+        });
+        return BoMdata;
+    } catch (error) {
+        console.error("Error checking last referenced bom:", error);
+        throw error;
+    }
+}
 
 module.exports = {
     findAll,
@@ -181,5 +194,6 @@ module.exports = {
     create,
     update,
     destroy,
-    destroyMany
+    destroyMany,
+    checkLastReferencedBom
 }

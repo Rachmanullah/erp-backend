@@ -216,6 +216,7 @@ const HandlerDeleteBoM = async (req, res) => {
     try {
         const { referensi } = req.params;
         const checkData = await bomService.findBoMByReference(referensi);
+        console.log(checkData)
         if (!checkData) return responseHandler.error(res, 'Data Not Found', 404);
         await bomService.deleteBoM(referensi);
         return responseHandler.success(res, null, 'delete data Success');

@@ -157,6 +157,20 @@ const updateStatusRfq = async (referensiRFQ, statusRfq) => {
     }
 };
 
+const checkLastReferencedRfq = async () => {
+    try {
+        const rfq = await prisma.rfq.findFirst({
+            orderBy: {
+                referensi: 'desc',
+            },
+        });
+        return rfq;
+    } catch (error) {
+        console.error("Error checking last referenced order:", error);
+        throw error;
+    }
+}
+
 
 module.exports = {
     findAll,
@@ -165,5 +179,6 @@ module.exports = {
     update,
     destroy,
     destroyMany,
-    updateStatusRfq
+    updateStatusRfq,
+    checkLastReferencedRfq,
 }

@@ -10,7 +10,6 @@ const validateBahan = yup.object({
 
 const validateProduct = yup.object({
     nama_produk: yup.string().required('Nama produk harus diisi'),
-    referensi: yup.string().optional(),
     kategori: yup.string().required('Kategori produk harus diisi'),
     harga_produk: yup.number().positive('Harga produk harus lebih besar dari 0').required('Harga produk harus diisi'),
     biaya_produksi: yup.number().positive('Biaya produksi harus lebih besar dari 0').required('Biaya produksi harus diisi'),
@@ -20,7 +19,6 @@ const validateProduct = yup.object({
 
 const validateBoM = yup.object({
     id_produk: yup.number().integer().required('ID produk harus diisi'),
-    referensi: yup.string().optional(),
     jumlah_produk: yup.number().positive('Jumlah produk harus lebih besar dari 0').integer().required('Jumlah produk harus diisi'),
     total_biaya_produk: yup.number().positive('Total biaya produk harus lebih besar dari 0').required('Total biaya produk harus diisi'),
     bahan: yup.array().of(
@@ -50,7 +48,6 @@ const validateVendor = yup.object({
 
 const validateRfq = yup.object({
     id_vendor: yup.number().integer().required('ID vendor harus diisi'),
-    referensi: yup.string().optional(),
     deadline_order: yup.string().optional(),
     status: yup.string().oneOf(['RFQ', 'Send RFQ', 'Confirmed', 'Received', 'Purchase Order', 'Cancel', 'Return'], 'Status harus pilih salah satu').default('RFQ'),
     bahan: yup.array().of(
@@ -81,7 +78,6 @@ const validateCustomer = yup.object({
 
 const validateQuotation = yup.object({
     id_customer: yup.number().integer().required('ID customer harus diisi'),
-    referensi: yup.string().optional(),
     order_date: yup.string().optional(),
     status: yup.string().oneOf(['Quotation', 'Quotation Sent', 'Delivery', 'Received', 'Sales Order', 'Cancel', 'Return'], 'Status harus pilih salah satu').default('Quotation'),
     produk: yup.array().of(

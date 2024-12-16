@@ -19,11 +19,23 @@ const findProductByID = async (productID) => {
 
 const createProduct = async (productData) => {
     try {
-        const subValidate = validateProduct.pick(['nama_produk', 'referensi', 'kategori', 'harga_produk', 'biaya_produksi', 'gambar_produk']);
+        const subValidate = validateProduct.pick(['nama_produk', 'kategori', 'harga_produk', 'biaya_produksi', 'gambar_produk']);
         await subValidate.validate(productData, { abortEarly: false });
+        const lastProduk = await productModels.checkLastReferencedProduk();
 
+        let newReference = 'P-0001';
+        if (lastProduk) {
+            const lastReference = lastProduk.referensi;
+            const match = lastReference.match(/P-(\d+)/);
+            if (match) {
+                const lastNumber = parseInt(match[1], 10);
+                const nextNumber = lastNumber + 1;
+                newReference = `P-${nextNumber.toString().padStart(4, '0')}`;
+            }
+        }
         const newProduct = {
             ...productData,
+            referensi: newReference,
             harga_produk: parseInt(productData.harga_produk),
             biaya_produksi: parseInt(productData.biaya_produksi),
             stok: 0,
@@ -36,7 +48,7 @@ const createProduct = async (productData) => {
 
 const updateProduct = async (productID, productData) => {
     try {
-        const subValidate = validateProduct.pick(['nama_produk', 'referensi', 'kategori', 'harga_produk', 'biaya_produksi', 'gambar_produk']);
+        const subValidate = validateProduct.pick(['nama_produk', 'kategori', 'harga_produk', 'biaya_produksi', 'gambar_produk']);
         await subValidate.validate(productData, { abortEarly: false });
 
         const product = {

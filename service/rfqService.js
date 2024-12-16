@@ -22,10 +22,24 @@ const createRfq = async (RfqData) => {
     try {
         const cleanedData = cleanRfqData(RfqData);
         await validateRfq.validate(cleanedData, { abortEarly: false });
-        console.log(cleanedData)
+
+        const lastRfq = await rfqModels.checkLastReferencedRfq();
+
+        let newReference = 'RFQ-0001'; // Default jika tidak ada order sebelumnya
+        if (lastRfq) {
+            const lastReference = lastRfq.referensi;
+            const match = lastReference.match(/RFQ-(\d+)/); // Ekstrak angka dari referensi terakhir
+            if (match) {
+                const lastNumber = parseInt(match[1], 10); // Convert angka terakhir ke integer
+                const nextNumber = lastNumber + 1; // Tambahkan 1 untuk referensi baru
+                newReference = `RFQ-${nextNumber.toString().padStart(4, '0')}`; // Format jadi MO/XXXX
+            }
+        }
+
         const data = {
             ...cleanedData,
-            status: "RFQ"
+            status: "RFQ",
+            referensi: newReference,
         }
         return await rfqModels.create(data);
     } catch (error) {
