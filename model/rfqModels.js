@@ -86,21 +86,21 @@ const update = async (referensi, rfqData) => {
         });
         return updatedRfq;
     } catch (error) {
-        console.error('Error updating BoM:', error.message);
+        console.error('Error updating rfq:', error.message);
         throw error;
     }
 };
 
 const destroy = async (referensiRfq) => {
     try {
-        const deletedBoM = await prisma.rfq.deleteMany({
+        const deletedRfq = await prisma.rfq.deleteMany({
             where: {
                 referensi: referensiRfq
             }
         });
-        return deletedBoM;
+        return deletedRfq;
     } catch (error) {
-        console.error("Error deleting BoM by ID:", error);
+        console.error("Error deleting rfq by ID:", error);
         throw error;
     }
 }
@@ -117,7 +117,7 @@ const destroyMany = async (referensi, bahanIDs) => {
         });
         return true;
     } catch (error) {
-        console.error('Error deleting BoM by referensi:', error);
+        console.error('Error deleting rfq by referensi:', error);
         throw error;
     }
 };

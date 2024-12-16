@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Product {
-  id             Int      @id @default(autoincrement())
+  id             Int              @id @default(autoincrement())
   nama_produk    String?
   referensi      String?
   kategori       String?
@@ -22,10 +22,11 @@ model Product {
   biaya_produksi Int?
   stok           Int?
   gambar_produk  String?
-  created_at     DateTime @default(now())
-  updated_at     DateTime @default(now())
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @default(now())
   BoM            BoM[]
   order          order[]
+  salesQuotation salesQuotation[]
 }
 
 model Bahan {
@@ -116,13 +117,48 @@ model billPurchase {
 }
 
 model customer {
-  id                 Int      @id @default(autoincrement())
+  id                 Int              @id @default(autoincrement())
   company_registrasi String?
   nama_customer      String?
   type               String?
   alamat             String?
   no_telp            String?
   email              String?
-  created_at         DateTime @default(now())
-  updated_at         DateTime @default(now())
+  created_at         DateTime         @default(now())
+  updated_at         DateTime         @default(now())
+  salesQuotation     salesQuotation[]
+}
+
+model salesQuotation {
+  id            Int       @id @default(autoincrement())
+  id_customer   Int
+  Customer      customer? @relation(fields: [id_customer], references: [id])
+  referensi     String?
+  order_date    DateTime?
+  id_produk     Int?
+  Produk        Product?  @relation(fields: [id_produk], references: [id])
+  jumlah_produk Int?
+  total_biaya   Int?
+  status        String? //Quotation, Quotation Send, Delivery, Receive, Sales Order/Cancel,
+}
+
+model salesOrder {
+  id                  Int       @id @default(autoincrement())
+  referensi_quotation String?   @unique
+  total_pembayaran    Int?
+  confirmation_date   DateTime?
+  arrival_date        DateTime?
+  status              String? //Nothing to Invoice, To Invoice, Fully Invoice
+}
+
+model salesInvoice {
+  id                  Int       @id @default(autoincrement())
+  referensi_quotation String?   @unique
+  referensi_invoice   String?   @unique
+  accounting_date     DateTime?
+  invoice_date        DateTime?
+  payment_date        DateTime?
+  type_invoice        String?
+  total_pembayaran    Int?
+  status              String? //Draft, Posted, Not Paid, Paid
 }

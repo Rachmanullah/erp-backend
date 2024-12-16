@@ -212,7 +212,7 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
         }
 
         if (updatedStatus.status === 'Cancel') {
-            await purchaseOrderModels.destroybyReferensiRfq(referensiRfq);
+            await billModels.destroybyReferensiRfq(referensiRfq);
         }
 
         // Jika status adalah 'Return'
@@ -232,7 +232,7 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
                 // // Perbarui stok bahan
                 await bahanModels.updateStok(bahan.id_bahan, updatedJumlahBahan);
             }
-
+            await billModels.destroybyReferensiRfq(referensiRfq);
             await purchaseOrderModels.destroybyReferensiRfq(referensiRfq);
         }
 

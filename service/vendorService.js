@@ -29,7 +29,7 @@ const createVendor = async (vendorData) => {
 const updateVendor = async (vendorID, vendorData) => {
     try {
         await validateVendor.validate(vendorData, { abortEarly: false });
-        return await vendorData.update(vendorID, vendorData);
+        return await vendorModels.update(vendorID, vendorData);
     } catch (error) {
         throw error;
     }

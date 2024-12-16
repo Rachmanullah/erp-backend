@@ -81,7 +81,19 @@ const update = async (orderID, orderData) => {
             where: {
                 id: orderID
             },
-            data: orderData
+            data: orderData,
+            include: {
+                Product: {
+                    select: {
+                        id: true,
+                        nama_produk: true,
+                        referensi: true,
+                        harga_produk: true,
+                        biaya_produksi: true,
+                        stok: true
+                    }
+                }
+            }
         });
         return order;
     } catch (error) {
@@ -96,7 +108,19 @@ const updateStatusOrder = async (orderID, statusOrder) => {
             where: {
                 id: orderID
             },
-            data: { status: statusOrder }
+            data: { status: statusOrder },
+            include: {
+                Product: {
+                    select: {
+                        id: true,
+                        nama_produk: true,
+                        referensi: true,
+                        harga_produk: true,
+                        biaya_produksi: true,
+                        stok: true
+                    }
+                }
+            }
         });
         return order;
     } catch (error) {

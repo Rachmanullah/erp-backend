@@ -23,7 +23,20 @@ const cleanRfqData = (data) => {
     };
 };
 
+const cleanQuotationData = (data) => {
+    return {
+        ...data,
+        id_customer: parseInt(data.id_customer),
+        produk: data.produk.map((item) => ({
+            id_produk: parseInt(item.id_produk),
+            jumlah_produk: parseFloat(item.jumlah_produk),
+            total_biaya: parseFloat(item.total_biaya),
+        })),
+    };
+};
+
 module.exports = {
     cleanBoMData,
-    cleanRfqData
+    cleanRfqData,
+    cleanQuotationData,
 }

@@ -65,10 +65,26 @@ const destroy = async (productID) => {
     }
 }
 
+const updateStok = async (produkID, stokProduk) => {
+    try {
+        const produk = await prisma.product.update({
+            where: {
+                id: produkID
+            },
+            data: { stok: stokProduk }
+        });
+        return produk;
+    } catch (error) {
+        console.error("Error updating produk:", error);
+        throw error;
+    }
+}
+
 module.exports = {
     findAll,
     findByID,
     create,
     update,
     destroy,
+    updateStok
 }

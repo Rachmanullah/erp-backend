@@ -52,7 +52,7 @@ const validateRfq = yup.object({
     id_vendor: yup.number().integer().required('ID vendor harus diisi'),
     referensi: yup.string().optional(),
     deadline_order: yup.string().optional(),
-    status: yup.string().oneOf(['RFQ', 'Send RFQ', 'Confirmed', 'Received', 'Validated', 'Cancel', 'Return'], 'Status harus pilih salah satu').default('RFQ'),
+    status: yup.string().oneOf(['RFQ', 'Send RFQ', 'Confirmed', 'Received', 'Purchase Order', 'Cancel', 'Return'], 'Status harus pilih salah satu').default('RFQ'),
     bahan: yup.array().of(
         yup.object({
             id_bahan: yup.number().integer().required('ID bahan harus diisi'),
@@ -79,6 +79,29 @@ const validateCustomer = yup.object({
     email: yup.string().email('Email customer harus valid').required('Email customer harus diisi'),
 });
 
+const validateQuotation = yup.object({
+    id_customer: yup.number().integer().required('ID customer harus diisi'),
+    referensi: yup.string().optional(),
+    order_date: yup.string().optional(),
+    status: yup.string().oneOf(['Quotation', 'Quotation Sent', 'Delivery', 'Received', 'Sales Order', 'Cancel', 'Return'], 'Status harus pilih salah satu').default('Quotation'),
+    produk: yup.array().of(
+        yup.object({
+            id_produk: yup.number().integer().required('ID produk harus diisi'),
+            jumlah_produk: yup.number().positive('Jumlah produk harus lebih besar dari 0').integer().required('Jumlah produk harus diisi'),
+            total_biaya: yup.number().positive('Total biaya produk harus lebih besar dari 0').required('Total biaya produk harus diisi'),
+        })
+    ).required(),
+});
+
+const validateSalesOrder = yup.object({
+    referensi_quotation: yup.string().required('referensi quotation harus di isi'),
+    // type: yup.string().oneOf(['-', 'Cash', 'Bank'], 'type harus pilih salah satu').default('-'),
+    total_pembayaran: yup.number().positive('jumlah pembayaran harus lebih besar dari 0').required('jumlah pembayaran harus di isi'),
+    confirmation_date: yup.string().optional(),
+    status: yup.string().oneOf(['Nothing to Invoice', 'To Invoice', 'Fully Invoiced'], 'Status harus pilih salah satu').default('Nothing to Invoice'),
+})
+
+
 module.exports = {
     validateBahan,
     validateProduct,
@@ -88,4 +111,6 @@ module.exports = {
     validateRfq,
     validatePO,
     validateCustomer,
+    validateQuotation,
+    validateSalesOrder,
 };

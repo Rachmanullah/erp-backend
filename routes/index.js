@@ -10,6 +10,9 @@ const rfqRoutes = require('./rfqRoutes');
 const purchaseOrderRoutes = require('./purchaseOrderRoutes');
 const billRoutes = require('./billRoutes');
 const customerRoutes = require('./customerRoutes');
+const quotationRoutes = require('./quotationRoutes');
+const salesOrderRoutes = require('./salesOrderRoutes');
+const salesInvoiceRoutes = require('./salesInvoiceRoutes');
 
 router.use('/bahan', bahanRoutes);
 router.use('/product', productRoutes);
@@ -20,5 +23,8 @@ router.use('/rfq', rfqRoutes);
 router.use('/purchaseOrder', purchaseOrderRoutes);
 router.use('/bill', billRoutes);
 router.use('/customer', customerRoutes);
+router.use('/quotation', quotationRoutes);
+router.use('/salesOrder', salesOrderRoutes);
+router.use('/salesInvoice', salesInvoiceRoutes);
 
 module.exports = router;

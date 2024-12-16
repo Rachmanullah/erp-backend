@@ -29,7 +29,7 @@ const createCustomer = async (customerData) => {
 const updateCustomer = async (customerID, customerData) => {
     try {
         await validateCustomer.validate(customerData, { abortEarly: false });
-        return await customerData.update(customerID, customerData);
+        return await customerModels.update(customerID, customerData);
     } catch (error) {
         throw error;
     }

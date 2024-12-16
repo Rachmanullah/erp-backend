@@ -107,6 +107,21 @@ const destroy = async (ID) => {
         throw error;
     }
 }
+
+const destroybyReferensiRfq = async (referensiRfq) => {
+    try {
+        const deletedData = await prisma.billPurchase.delete({
+            where: {
+                referensi_rfq: referensiRfq
+            }
+        });
+        return deletedData;
+    } catch (error) {
+        console.error("Error deleting purchase order by ID:", error);
+        throw error;
+    }
+}
+
 module.exports = {
     findAll,
     findByID,
@@ -116,4 +131,5 @@ module.exports = {
     create,
     update,
     destroy,
+    destroybyReferensiRfq
 }
