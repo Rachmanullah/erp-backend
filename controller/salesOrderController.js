@@ -45,7 +45,7 @@ const HandlerGetSalesOrderByID = async (req, res) => {
         const data = await salesOrderService.findSalesOrderByID(id);
         if (!data) return responseHandler.error(res, 'Data Not Found', 404);
 
-        const quotation = await quotationService.findQuotationByReference(data.referensi_rfq);
+        const quotation = await quotationService.findQuotationByReference(data.referensi_quotation);
         let nama_customer = null;
 
         if (quotation.length > 0) {

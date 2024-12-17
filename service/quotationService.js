@@ -1,5 +1,6 @@
-const { quotationModels, productModels, salesOrderModels, salesInvoiceModels } = require("../model");
+const { quotationModels, productModels, salesOrderModels, salesInvoiceModels, customerModels } = require("../model");
 const { cleanQuotationData } = require("../utils/cleanData");
+const { sendQuotationEmail } = require("../utils/emailUtils");
 const { validateQuotation } = require("../utils/validationHelper");
 
 const findAllQuotation = async () => {
@@ -35,7 +36,8 @@ const createQuotation = async (quotationData) => {
         }
         const data = {
             ...cleanedData,
-            status: "Quotation"
+            status: "Quotation",
+            referensi: newReference,
         }
         return await quotationModels.create(data);
     } catch (error) {
@@ -132,11 +134,24 @@ const updateStatusQuotation = async (referensiQuotation, updatedStatus) => {
         // Mapping data Quotation ke format yang diperlukan
         const quotationProduk = quotationData.map((item) => ({
             id_produk: item.Produk.id,
+            referensi: item.referensi,
             nama_produk: item.Produk.nama_produk,
             harga_produk: item.Produk.harga_produk,
             jumlah_produk: item.jumlah_produk,
             total_biaya: item.total_biaya,
         }));
+
+        const customerInfo = await customerModels.findByID(quotationData[0].id_customer);
+
+        if (updatedStatus.status === 'Quotation Sent') {
+            let totalPembayaran = 0;
+
+            for (const produk of quotationProduk) {
+                totalPembayaran += Number(produk.total_biaya) || 0;
+            }
+
+            sendQuotationEmail(referensiQuotation, quotationProduk, totalPembayaran, customerInfo.email, customerInfo)
+        }
 
         //status Received
         if (updatedStatus.status === 'Delivery') {
@@ -226,7 +241,7 @@ const updateStatusQuotation = async (referensiQuotation, updatedStatus) => {
 
                 // Hitung jumlah produk yang dikembalikan
                 const updatedJumlahProduk =
-                    (Number(currentProduk.stok) || 0) - (Number(produk.jumlah_produk) || 0);
+                    (Number(currentProduk.stok) || 0) + (Number(produk.jumlah_produk) || 0);
 
                 // // Perbarui stok produk
                 await productModels.updateStok(produk.id_produk, updatedJumlahProduk);

@@ -1,5 +1,6 @@
-const { rfqModels, bahanModels, purchaseOrderModels, billModels } = require("../model");
+const { rfqModels, bahanModels, purchaseOrderModels, billModels, vendorModels } = require("../model");
 const { cleanRfqData } = require("../utils/cleanData");
+const { sendRfqEmail } = require("../utils/emailUtils");
 const { validateRfq } = require("../utils/validationHelper");
 
 const findAllRfq = async () => {
@@ -137,6 +138,7 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
         // Ambil data RFQ berdasarkan referensi
         const rfqData = await rfqModels.findByReferensi(referensiRfq);
 
+        const vendorInfo = await vendorModels.findByID(rfqData[0].id_vendor);
         // Mapping data RFQ ke format yang diperlukan
         const rfqBahan = rfqData.map((item) => ({
             id_bahan: item.Bahan.id,
@@ -145,7 +147,15 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
             jumlah_bahan: item.jumlah_bahan,
             total_biaya: item.total_biaya,
         }));
+        if (updatedStatus.status === 'Send RFQ') {
+            let totalPembayaran = 0;
 
+            for (const bahan of rfqBahan) {
+                totalPembayaran += Number(bahan.total_biaya) || 0;
+            }
+
+            sendRfqEmail(referensiRfq, rfqBahan, totalPembayaran, vendorInfo.email, vendorInfo)
+        }
         //status Received
         if (updatedStatus.status === 'Confirmed') {
 
