@@ -82,6 +82,24 @@ const updateStatusSalesInvoice = async (salesInvoiceID, updatedStatus) => {
     }
 }
 
+const findTopInvoiceByTotal = async () => {
+    try {
+        return await salesInvoiceModels.findTop5InvoicesByTotal()
+    } catch (error) {
+        console.error("Error:", error.message);
+        throw error;
+    }
+}
+
+const getTotalInvoice = async () => {
+    try {
+        return await salesInvoiceModels.getTotalPaidInvoices()
+    } catch (error) {
+        console.error("Error:", error.message);
+        throw error;
+    }
+}
+
 module.exports = {
     findAllSalesInvoice,
     findSalesInvoiceById,
@@ -90,5 +108,7 @@ module.exports = {
     createSalesInvoice,
     updateSalesInvoice,
     deleteSalesInvoice,
-    updateStatusSalesInvoice
+    updateStatusSalesInvoice,
+    findTopInvoiceByTotal,
+    getTotalInvoice,
 }

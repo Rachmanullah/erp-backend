@@ -13,7 +13,7 @@ const HandlerGetAllProduct = async (req, res) => {
 
 const HandlerGetProductById = async (req, res) => {
     try {
-        const { id } = parseInt(req.params.id);
+        const id = parseInt(req.params.id);
         const data = await productService.findProductByID(id);
         if (!data) return responseHandler.error(res, 'Data Not Found', 404);
         return responseHandler.success(res, data, 'get data by id Success');
@@ -95,10 +95,21 @@ const HandlerDeleteProduct = async (req, res) => {
     }
 }
 
+const HandlerCountProduct = async (req, res) => {
+    try {
+        const data = await productService.countProduk();
+        return responseHandler.success(res, data, 'get count data Success');
+    } catch (error) {
+        console.error('Unexpected Error:', error);
+        return responseHandler.error(res, 'Internal Server Error', 500);
+    }
+}
+
 module.exports = {
     HandlerGetAllProduct,
     HandlerGetProductById,
     HandlerCreateProduct,
     HandlerUpdateProduct,
     HandlerDeleteProduct,
+    HandlerCountProduct,
 }

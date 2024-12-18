@@ -94,6 +94,16 @@ const checkLastReferencedProduk = async () => {
     }
 }
 
+const getCountProduk = async () => {
+    try {
+        const count = await prisma.product.count();
+
+        return count;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     findAll,
     findByID,
@@ -102,4 +112,5 @@ module.exports = {
     destroy,
     updateStok,
     checkLastReferencedProduk,
+    getCountProduk,
 }

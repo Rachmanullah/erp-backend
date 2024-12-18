@@ -139,6 +139,40 @@ const updateStatusInvoice = async (referensi, statusInvoice) => {
     }
 };
 
+const findTop5InvoicesByTotal = async () => {
+    try {
+        const topInvoices = await prisma.salesInvoice.findMany({
+            orderBy: {
+                total_pembayaran: 'desc',
+            },
+            take: 5,
+        });
+        return topInvoices;
+    } catch (error) {
+        console.error("Error fetching top 5 invoices by total pembayaran:", error);
+        throw error;
+    }
+};
+
+const getTotalPaidInvoices = async () => {
+    try {
+        const totalPaid = await prisma.salesInvoice.aggregate({
+            _sum: {
+                total_pembayaran: true,
+            },
+            where: {
+                status: 'Paid',
+            },
+        });
+
+        return totalPaid._sum.total_pembayaran || 0; // Kembalikan 0 jika tidak ada data
+    } catch (error) {
+        console.error("Error calculating total of Paid invoices:", error);
+        throw error;
+    }
+};
+
+
 module.exports = {
     findAll,
     findByID,
@@ -150,4 +184,6 @@ module.exports = {
     destroy,
     destroybyReferensiQuotation,
     updateStatusInvoice,
+    findTop5InvoicesByTotal,
+    getTotalPaidInvoices
 }

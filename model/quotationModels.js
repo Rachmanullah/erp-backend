@@ -170,6 +170,61 @@ const checkLastReferencedQuotation = async () => {
     }
 }
 
+const getCountQuotation = async () => {
+    try {
+        const uniqueQuotations = await prisma.salesQuotation.groupBy({
+            by: ['referensi'],
+            where: {
+                status: {
+                    not: 'Cancel',
+                },
+            },
+            _count: {
+                referensi: true,
+            },
+        });
+
+        const count = uniqueQuotations.length;
+
+        return count;
+    } catch (error) {
+        console.error("Error getting count of unique quotations:", error);
+        throw error;
+    }
+};
+
+const getMostFrequentProductId = async () => {
+    try {
+        const mostFrequentProduct = await prisma.salesQuotation.groupBy({
+            by: ['id_produk'], // Kelompokkan berdasarkan id_produk
+            _count: {
+                id_produk: true, // Hitung jumlah kemunculan id_produk
+            },
+            orderBy: {
+                _count: {
+                    id_produk: 'desc', // Urutkan dari jumlah terbanyak
+                },
+            },
+            take: 1, // Ambil data teratas (paling banyak)
+        });
+
+        if (mostFrequentProduct.length > 0) {
+            const { id_produk, _count } = mostFrequentProduct[0];
+            return {
+                id_produk,
+                count: _count.id_produk,
+            };
+        } else {
+            return null; // Tidak ada data
+        }
+    } catch (error) {
+        console.error("Error getting most frequent product ID:", error);
+        throw error;
+    }
+};
+
+
+
 module.exports = {
     findAll,
     findByReferensi,
@@ -178,5 +233,7 @@ module.exports = {
     destroy,
     destroyMany,
     updateStatusQuotation,
-    checkLastReferencedQuotation
+    checkLastReferencedQuotation,
+    getCountQuotation,
+    getMostFrequentProductId
 }

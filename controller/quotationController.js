@@ -1,4 +1,4 @@
-const { quotationService, customerService } = require("../service");
+const { quotationService, customerService, productService } = require("../service");
 const responseHandler = require("../utils/responseHandler");
 
 const HandlerGetAllQuotation = async (req, res) => {
@@ -179,11 +179,42 @@ const HandlerUpdateStatusQuotation = async (req, res) => {
     }
 }
 
+const HandlerCountQuotation = async (req, res) => {
+    try {
+        const data = await quotationService.countQuotation();
+        return responseHandler.success(res, data, 'get count data Success');
+    } catch (error) {
+        console.error('Unexpected Error:', error);
+        return responseHandler.error(res, 'Internal Server Error', 500);
+    }
+}
+
+const HandlerProdukTeratas = async (req, res) => {
+    try {
+        const data = await quotationService.getProdukTeratas();
+        const produk = await productService.findProductByID(data.id_produk);
+        if (!produk) return responseHandler.error(res, 'Data Not Found', 404);
+
+        const result = {
+            ...data,
+            image: produk.gambar_produk,
+            referensi: produk.referensi,
+            nama_produk: produk.nama_produk,
+        }
+        return responseHandler.success(res, result, 'get count data Success');
+    } catch (error) {
+        console.error('Unexpected Error:', error);
+        return responseHandler.error(res, 'Internal Server Error', 500);
+    }
+}
+
 module.exports = {
     HandlerGetAllQuotation,
     HandlerGetQuotationByReference,
     HandlerCreateQuotation,
     HandlerUpdateQuotation,
     HandlerDeleteQuotation,
-    HandlerUpdateStatusQuotation
+    HandlerUpdateStatusQuotation,
+    HandlerCountQuotation,
+    HandlerProdukTeratas,
 }

@@ -267,6 +267,21 @@ const deleteQuotation = async (referensi) => {
     }
 }
 
+const countQuotation = async () => {
+    try {
+        return await quotationModels.getCountQuotation()
+    } catch (error) {
+        throw new Error('Error: ' + error.message);
+    }
+}
+
+const getProdukTeratas = async () => {
+    try {
+        return await quotationModels.getMostFrequentProductId();
+    } catch (error) {
+        throw new Error('Error: ' + error.message);
+    }
+}
 
 module.exports = {
     findAllQuotation,
@@ -274,5 +289,7 @@ module.exports = {
     createQuotation,
     updateQuotationByReferensi,
     deleteQuotation,
-    updateStatusQuotation
+    updateStatusQuotation,
+    countQuotation,
+    getProdukTeratas,
 };

@@ -70,10 +70,19 @@ const deleteProduct = async (productID) => {
     }
 }
 
+const countProduk = async () => {
+    try {
+        return await productModels.getCountProduk()
+    } catch (error) {
+        throw new Error('Error: ' + error.message);
+    }
+}
+
 module.exports = {
     findAllProduct,
     findProductByID,
     createProduct,
     updateProduct,
     deleteProduct,
+    countProduk,
 }

@@ -139,9 +139,31 @@ const HandlerUpdateInvoice = async (req, res) => {
     }
 };
 
+const HandlerFindTopInvoiceByTotal = async (req, res) => {
+    try {
+        const data = await salesInvoiceService.findTopInvoiceByTotal();
+        return responseHandler.success(res, data, 'Get top 5 invoice by total success');
+    } catch (error) {
+        console.error('Unexpected Error:', error);
+        return responseHandler.error(res, 'Internal Server Error', 500);
+    }
+}
+
+const HandlerGetTotalInvoce = async (req, res) => {
+    try {
+        const data = await salesInvoiceService.getTotalInvoice()
+        return responseHandler.success(res, data, 'Get total invoice success');
+    } catch (error) {
+        console.error('Unexpected Error:', error);
+        return responseHandler.error(res, 'Internal Server Error', 500);
+    }
+}
+
 module.exports = {
     HandlerGetAllInvoice,
     HandlerGetInvoiceByReferenceQuotation,
     HandlerUpdateStatusInvoice,
-    HandlerUpdateInvoice
+    HandlerUpdateInvoice,
+    HandlerFindTopInvoiceByTotal,
+    HandlerGetTotalInvoce,
 };
