@@ -101,7 +101,7 @@ model purchaseOrder {
   total_pembayaran  Int?
   confirmation_date DateTime?
   arrival_date      DateTime?
-  status            String? //Nothing to bill, Waiting Bill, Fully Billed
+  status            String? //Nothing to bill, Waiting Bill, Fully Billed, cancel
 }
 
 model billPurchase {
@@ -113,7 +113,7 @@ model billPurchase {
   payment_date     DateTime?
   type_bill        String?
   total_pembayaran Int?
-  status           String? //Draft, Posted, Not Paid, Paid
+  status           String? //Draft, Posted, Not Paid, Paid, cancel
 }
 
 model customer {
@@ -148,7 +148,7 @@ model salesOrder {
   total_pembayaran    Int?
   confirmation_date   DateTime?
   arrival_date        DateTime?
-  status              String? //Nothing to Invoice, To Invoice, Fully Invoice
+  status              String? //Nothing to Invoice, To Invoice, Fully Invoice, Cancel
 }
 
 model salesInvoice {
@@ -160,5 +160,5 @@ model salesInvoice {
   payment_date        DateTime?
   type_invoice        String?
   total_pembayaran    Int?
-  status              String? //Draft, Posted, Not Paid, Paid
+  status              String? //Draft, Posted, Not Paid, Paid, Cancel
 }

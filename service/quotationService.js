@@ -153,6 +153,7 @@ const updateStatusQuotation = async (referensiQuotation, updatedStatus) => {
             sendQuotationEmail(referensiQuotation, quotationProduk, totalPembayaran, customerInfo.email, customerInfo)
         }
 
+
         //status Received
         if (updatedStatus.status === 'Delivery') {
 
@@ -171,8 +172,25 @@ const updateStatusQuotation = async (referensiQuotation, updatedStatus) => {
 
             await salesOrderModels.create(dataSalesOrder);
 
-            // Log dataSalesOrder untuk memastikan berhasil dibuat
-            console.log("Data Sales Order:", dataSalesOrder);
+            const lastInvoice = await salesInvoiceModels.checkLastReferencedinvoice();
+            let nextNumber = 1;
+            const today = new Date().toISOString().split('T')[0];
+            if (lastInvoice) {
+                const lastReferensi = lastInvoice.referensi_invoice;
+                const lastNumber = parseInt(lastReferensi.split('/').pop()); // Ambil nomor terakhir
+                nextNumber = lastNumber + 1;
+            }
+
+            const referensiInvoice = `INV/${today}/${nextNumber}`;
+            const dataInvoice = {
+                referensi_quotation: referensiQuotation,
+                referensi_invoice: referensiInvoice,
+                accounting_date: new Date(),
+                total_pembayaran: parseInt(totalPembayaran),
+                status: "Draft",
+            }
+
+            await salesInvoiceModels.create(dataInvoice);
         }
 
         //status Received
@@ -202,31 +220,11 @@ const updateStatusQuotation = async (referensiQuotation, updatedStatus) => {
             }
             const salesOrder = await salesOrderModels.findByReferensiQuotation(referensiQuotation);
             await salesOrderModels.update(salesOrder.id, { status: 'To Invoice' });
-
-            const lastInvoice = await salesInvoiceModels.checkLastReferencedinvoice();
-            let nextNumber = 1;
-            const today = new Date().toISOString().split('T')[0];
-            if (lastInvoice) {
-                const lastReferensi = lastInvoice.referensi_invoice;
-                const lastNumber = parseInt(lastReferensi.split('/').pop()); // Ambil nomor terakhir
-                nextNumber = lastNumber + 1;
-            }
-
-            const referensiInvoice = `Invoice/${today}/${nextNumber}`;
-            const dataInvoice = {
-                referensi_quotation: referensiQuotation,
-                referensi_invoice: referensiInvoice,
-                accounting_date: new Date(),
-                total_pembayaran: parseInt(totalPembayaran),
-                status: "Draft",
-            }
-
-            await salesInvoiceModels.create(dataInvoice);
         }
 
         if (updatedStatus.status === 'Cancel') {
-            await salesInvoiceModels.destroybyReferensiQuotation(referensiQuotation);
-            await salesOrderModels.destroybyReferensiQuotation(referensiQuotation);
+            await salesInvoiceModels.updateStatusInvoice(referensiQuotation, { status: "Cancel" });
+            await salesOrderModels.updateStatus(referensiQuotation, { status: "Cancel" });
         }
 
         // Jika status adalah 'Return'
@@ -247,8 +245,8 @@ const updateStatusQuotation = async (referensiQuotation, updatedStatus) => {
                 await productModels.updateStok(produk.id_produk, updatedJumlahProduk);
             }
 
-            await salesInvoiceModels.destroybyReferensiQuotation(referensiQuotation);
-            await salesOrderModels.destroybyReferensiQuotation(referensiQuotation);
+            await salesInvoiceModels.updateStatusInvoice(referensiQuotation, { status: "Draft" });
+            await salesOrderModels.updateStatus(referensiQuotation, { status: "To Invoice" });
         }
 
         // Update status Quotation

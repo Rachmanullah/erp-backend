@@ -88,7 +88,7 @@ const HandlerCreateRfq = async (req, res) => {
 
         const createdData = await rfqService.createRfq(data);
 
-        return responseHandler.success(res, createdData, 'Create BoM Success', 201);
+        return responseHandler.success(res, createdData, 'Create RFQ Success', 201);
     } catch (error) {
         if (error.name === 'ValidationError') {
             const validationErrors = error.inner.reduce((acc, err) => {

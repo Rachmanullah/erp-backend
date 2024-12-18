@@ -124,7 +124,6 @@ const destroyMany = async (referensi, produkID) => {
 
 const updateStatusQuotation = async (referensi, statusQuotation) => {
     try {
-        console.log(statusQuotation.status)
         await prisma.salesQuotation.updateMany({
             where: {
                 referensi: referensi

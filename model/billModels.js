@@ -122,6 +122,22 @@ const destroybyReferensiRfq = async (referensiRfq) => {
     }
 }
 
+const updateStatusBill = async (referensi, statusBill) => {
+    try {
+        const updateStatus = await prisma.billPurchase.update({
+            where: {
+                referensi_rfq: referensi
+            },
+            data: { status: statusBill.status }
+        });
+
+        return updateStatus;
+    } catch (error) {
+        console.error("Error updating order:", error);
+        throw error;
+    }
+};
+
 module.exports = {
     findAll,
     findByID,
@@ -131,5 +147,6 @@ module.exports = {
     create,
     update,
     destroy,
-    destroybyReferensiRfq
+    destroybyReferensiRfq,
+    updateStatusBill
 }

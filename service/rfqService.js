@@ -174,8 +174,25 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
 
             await purchaseOrderModels.create(dataPO);
 
-            // Log dataPO untuk memastikan berhasil dibuat
-            console.log("Data Purchase Order:", dataPO);
+            const lastBill = await billModels.checkLastReferencedBill();
+            let nextNumber = 1;
+            const today = new Date().toISOString().split('T')[0];
+            if (lastBill) {
+                const lastReferensi = lastBill.referensi_bill;
+                const lastNumber = parseInt(lastReferensi.split('/').pop()); // Ambil nomor terakhir
+                nextNumber = lastNumber + 1;
+            }
+
+            const referensiBill = `BILL/${today}/${nextNumber}`;
+            const dataBill = {
+                referensi_rfq: referensiRfq,
+                referensi_bill: referensiBill,
+                accounting_date: new Date(),
+                total_pembayaran: parseInt(totalPembayaran),
+                status: "Draft",
+            }
+
+            await billModels.create(dataBill);
         }
 
         //status Received
@@ -214,29 +231,30 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
             const purchaseOrder = await purchaseOrderModels.findByReferensiRfq(referensiRfq);
             await purchaseOrderModels.update(purchaseOrder.id, { status: 'Waiting Bill' });
 
-            const lastBill = await billModels.checkLastReferencedBill();
-            let nextNumber = 1;
-            const today = new Date().toISOString().split('T')[0];
-            if (lastBill) {
-                const lastReferensi = lastBill.referensi_bill;
-                const lastNumber = parseInt(lastReferensi.split('/').pop()); // Ambil nomor terakhir
-                nextNumber = lastNumber + 1;
-            }
+            // const lastBill = await billModels.checkLastReferencedBill();
+            // let nextNumber = 1;
+            // const today = new Date().toISOString().split('T')[0];
+            // if (lastBill) {
+            //     const lastReferensi = lastBill.referensi_bill;
+            //     const lastNumber = parseInt(lastReferensi.split('/').pop()); // Ambil nomor terakhir
+            //     nextNumber = lastNumber + 1;
+            // }
 
-            const referensiBill = `Bill/${today}/${nextNumber}`;
-            const dataBill = {
-                referensi_rfq: referensiRfq,
-                referensi_bill: referensiBill,
-                accounting_date: new Date(),
-                total_pembayaran: parseInt(totalPembayaran),
-                status: "Draft",
-            }
+            // const referensiBill = `BILL/${today}/${nextNumber}`;
+            // const dataBill = {
+            //     referensi_rfq: referensiRfq,
+            //     referensi_bill: referensiBill,
+            //     accounting_date: new Date(),
+            //     total_pembayaran: parseInt(totalPembayaran),
+            //     status: "Draft",
+            // }
 
-            await billModels.create(dataBill);
+            // await billModels.create(dataBill);
         }
 
         if (updatedStatus.status === 'Cancel') {
-            await billModels.destroybyReferensiRfq(referensiRfq);
+            rfqData[0].status === 'Purchase Order' && await billModels.updateStatusBill(referensiRfq, { Status: 'Cancel' });
+            await purchaseOrderModels.updateStatus(referensiRfq, { status: 'Cancel' });
         }
 
         // Jika status adalah 'Return'
@@ -256,8 +274,8 @@ const updateStatusRfq = async (referensiRfq, updatedStatus) => {
                 // // Perbarui stok bahan
                 await bahanModels.updateStok(bahan.id_bahan, updatedJumlahBahan);
             }
-            await billModels.destroybyReferensiRfq(referensiRfq);
-            await purchaseOrderModels.destroybyReferensiRfq(referensiRfq);
+            await billModels.updateStatusBill(referensiRfq, { Status: 'Draft' });
+            await purchaseOrderModels.updateStatus(referensiRfq, { status: 'Waiting Bill' });
         }
 
         // Update status RFQ
