@@ -9,7 +9,12 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.use(express.json());
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({
+    credentials: true, origin: [
+        "http://localhost:3000",
+        "https://erp-frontend-navy.vercel.app"
+    ]
+}));
 
 // Routes
 app.use('/api', routes);
