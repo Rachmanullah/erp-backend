@@ -18,8 +18,8 @@ app.get('/', function (req, res) {
     res.send('Hello from Express API!');
 })
 
-// app.listen(PORT, () => {
-//     console.log("Express API running in port : " + PORT);
-// });
+app.listen(PORT, () => {
+    console.log("Express API running in port : " + PORT);
+});
 
 module.exports = app;
