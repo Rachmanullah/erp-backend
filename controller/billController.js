@@ -1,6 +1,17 @@
 const { billService, purchaseOrderService, rfqService } = require("../service");
 const responseHandler = require("../utils/responseHandler");
 
+const HandlerGetAllBill = async (req, res) => {
+    try {
+        const bill = await billService.findAllBill();
+        
+        return responseHandler.success(res, bill, 'SuccessFuly', 200);
+    } catch (error) {
+        console.error('Error:', error.message);
+        return responseHandler.error(res, 'Internal Server Error', 500);
+    }
+}
+
 const HandlerGetBillByReferenceRfq = async (req, res) => {
     try {
         const { referensi } = req.params;
@@ -128,6 +139,7 @@ const HandlerUpdateBill = async (req, res) => {
     }
 };
 module.exports = {
+    HandlerGetAllBill,
     HandlerGetBillByReferenceRfq,
     HandlerUpdateStatusBill,
     HandlerUpdateBill

@@ -1,6 +1,17 @@
 const { salesInvoiceService, salesOrderService, quotationService } = require("../service");
 const responseHandler = require("../utils/responseHandler");
 
+const HandlerGetAllInvoice = async (req, res) => {
+    try {
+        const salesInvoice = await salesInvoiceService.findAllSalesInvoice();
+
+        return responseHandler.success(res, salesInvoice, 'SuccessFuly', 200);
+    } catch (error) {
+        console.error('Error:', error.message);
+        return responseHandler.error(res, 'Internal Server Error', 500);
+    }
+}
+
 const HandlerGetInvoiceByReferenceQuotation = async (req, res) => {
     try {
         const { referensi } = req.params;
@@ -129,6 +140,7 @@ const HandlerUpdateInvoice = async (req, res) => {
 };
 
 module.exports = {
+    HandlerGetAllInvoice,
     HandlerGetInvoiceByReferenceQuotation,
     HandlerUpdateStatusInvoice,
     HandlerUpdateInvoice

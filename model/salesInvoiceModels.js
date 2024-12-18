@@ -2,7 +2,7 @@ const prisma = require("../utils/prismaClient");
 
 const findAll = async () => {
     try {
-        const invoice = await prisma.salesInvoice.findMany({});
+        const invoice = await prisma.salesInvoice.findMany();
         return invoice;
     } catch (error) {
         console.error("Error fetching:", error);
