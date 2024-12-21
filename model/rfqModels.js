@@ -72,6 +72,7 @@ const create = async (rfqData) => {
 
 const update = async (referensi, rfqData) => {
     try {
+        console.log(rfqData)
         const updatedRfq = await prisma.rfq.updateMany({
             where: {
                 AND: [
@@ -80,6 +81,8 @@ const update = async (referensi, rfqData) => {
                 ],
             },
             data: {
+                id_vendor: rfqData.id_vendor,
+                deadline_order: rfqData.deadline_order,
                 jumlah_bahan: parseInt(rfqData.jumlah_bahan, 10),
                 total_biaya: parseInt(rfqData.total_biaya, 10),
             },
