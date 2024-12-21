@@ -1,6 +1,8 @@
 
 const { rfqService, vendorService, bahanService } = require("../service");
+const createPDF = require("../utils/generatePdf");
 const responseHandler = require("../utils/responseHandler");
+const fs = require("fs");
 
 const HandlerGetAllRfq = async (req, res) => {
     try {
@@ -179,11 +181,55 @@ const HandlerUpdateStatusRfq = async (req, res) => {
     }
 }
 
+const HandlerPrintRfq = async (req, res) => {
+    try {
+        const { referensi } = req.params;
+
+        const data = await rfqService.findRfqByReference(referensi);
+        if (!data) return responseHandler.error(res, 'Data Not Found', 404);
+
+        const formattedData = {
+            id_vendor: data[0].id_vendor,
+            referensi: data[0].referensi,
+            nama_vendor: data[0].Vendor.nama_vendor,
+            deadline_order: data[0].deadline_order,
+            status: data[0].status,
+            Bahan: data.map((item) => ({
+                id_bahan: item.Bahan.id,
+                nama_bahan: item.Bahan.nama_bahan,
+                biaya_bahan: item.Bahan.biaya_bahan,
+                jumlah_bahan: item.jumlah_bahan,
+                total_biaya: item.total_biaya,
+            })),
+        };
+
+        // Generate PDF
+        const pdfBuffer = await createPDF(formattedData);
+        console.log("PDF Buffer Length:", pdfBuffer.length);
+        // fs.writeFileSync(`./RFQ #${formattedData.referensi}.pdf`, pdfBuffer);
+        // Kirimkan PDF ke response
+        // Encode PDF buffer to Base64
+        const pdfBase64 = pdfBuffer.toString('base64');
+
+        // Send response with JSON containing formattedData and PDF
+        res.json({
+            success: true,
+            message: "PDF generated successfully",
+            data: formattedData,
+            pdf: pdfBase64,
+        });
+    } catch (error) {
+        console.error('Unexpected Error:', error);
+        return responseHandler.error(res, 'Internal Server Error', 500);
+    }
+}
+
 module.exports = {
     HandlerGetAllRfq,
     HandlerGetRfqByReference,
     HandlerCreateRfq,
     HandlerUpdateRfq,
     HandlerDeleteRfq,
-    HandlerUpdateStatusRfq
+    HandlerUpdateStatusRfq,
+    HandlerPrintRfq
 }

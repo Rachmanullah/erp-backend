@@ -196,27 +196,22 @@ const getCountQuotation = async () => {
 const getMostFrequentProductId = async () => {
     try {
         const mostFrequentProduct = await prisma.salesQuotation.groupBy({
-            by: ['id_produk'], // Kelompokkan berdasarkan id_produk
-            _count: {
-                id_produk: true, // Hitung jumlah kemunculan id_produk
-            },
-            orderBy: {
-                _count: {
-                    id_produk: 'desc', // Urutkan dari jumlah terbanyak
-                },
-            },
-            take: 1, // Ambil data teratas (paling banyak)
+            by: ['id_produk'],
+            _count: { id_produk: true },
+            orderBy: { _count: { id_produk: 'desc' } },
+            take: 1,
         });
 
-        if (mostFrequentProduct.length > 0) {
-            const { id_produk, _count } = mostFrequentProduct[0];
-            return {
-                id_produk,
-                count: _count.id_produk,
-            };
-        } else {
-            return null; // Tidak ada data
+        // Jika tidak ada data
+        if (!mostFrequentProduct || mostFrequentProduct.length === 0) {
+            return null;
         }
+
+        const { id_produk, _count } = mostFrequentProduct[0];
+        return {
+            id_produk,
+            count: _count.id_produk,
+        };
     } catch (error) {
         console.error("Error getting most frequent product ID:", error);
         throw error;

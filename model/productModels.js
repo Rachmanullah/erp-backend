@@ -17,7 +17,7 @@ const findByID = async (productID) => {
                 id: productID
             }
         });
-        return product;
+        return product ? product : null;
     } catch (error) {
         console.error("Error fetching product by ID:", error);
         throw error;

@@ -192,8 +192,18 @@ const HandlerCountQuotation = async (req, res) => {
 const HandlerProdukTeratas = async (req, res) => {
     try {
         const data = await quotationService.getProdukTeratas();
+        console.log(data);
+        if (!data || !data.id_produk) {
+            return responseHandler.success(res, [], "Produk teratas tidak ditemukan", 200);
+        }
+
+        // Ambil detail produk berdasarkan `id_produk`
         const produk = await productService.findProductByID(data.id_produk);
-        if (!produk) return responseHandler.error(res, 'Data Not Found', 404);
+
+        // Jika produk tidak ditemukan
+        if (!produk) {
+            return responseHandler.success(res, [], "Detail produk tidak ditemukan", 200);
+        }
 
         const result = {
             ...data,

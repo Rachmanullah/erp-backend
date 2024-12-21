@@ -14,6 +14,8 @@ const quotationRoutes = require('./quotationRoutes');
 const salesOrderRoutes = require('./salesOrderRoutes');
 const salesInvoiceRoutes = require('./salesInvoiceRoutes');
 const countRoutes = require('./countRoutes');
+const printRoutes = require('./printRoutes');
+
 router.use('/bahan', bahanRoutes);
 router.use('/product', productRoutes);
 router.use('/bom', bomRoutes);
@@ -27,5 +29,6 @@ router.use('/quotation', quotationRoutes);
 router.use('/salesOrder', salesOrderRoutes);
 router.use('/salesInvoice', salesInvoiceRoutes);
 router.use('/count', countRoutes);
+router.use('/print', printRoutes);
 
 module.exports = router;
