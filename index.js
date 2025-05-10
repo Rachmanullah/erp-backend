@@ -18,8 +18,8 @@ app.use(express.json());
 app.use(cors({
     credentials: true, origin: [
         "http://localhost:3000",
-        "http://192.168.223.160:3000",
-        "https://erp-frontend-navy.vercel.app"
+        "http://192.168.198.160:3000",
+        "https://erp-frontend-navy.vercel.app",
     ]
 }));
 
